@@ -1,0 +1,29 @@
+name: Python application
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install trivy
+      run: | 
+        sudo apt-get update
+        sudo apt-get install -y wget
+        wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.1_Linux-64bit.deb
+        sudo dpkg -i trivy_0.50.1_Linux-64bit.deb
+
+    - name: Trivy scan for code repo
+      run: trivy fs --exit-code 1 --severity CRITICAL,HIGH .
+    
+    - name: Upload Trivy report artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: trivy-report
+        path: trivy-reports/report.txt
