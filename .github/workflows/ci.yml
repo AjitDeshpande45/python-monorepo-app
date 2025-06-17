@@ -20,7 +20,9 @@ jobs:
         sudo dpkg -i trivy_0.50.1_Linux-64bit.deb
 
     - name: Trivy scan for code repo
-      run: trivy fs --exit-code 1 --severity CRITICAL,HIGH .
+      run: |
+        mkdir -p trivy-reports
+        trivy fs --exit-code 1 --severity CRITICAL,HIGH --output trivy-reports/report.txt .
     
     - name: Upload Trivy report artifact
       uses: actions/upload-artifact@v4
