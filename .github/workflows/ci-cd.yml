@@ -31,13 +31,15 @@ jobs:
         path: trivy-reports/report.txt
 
     - name: Loginng into VM
+      env: |
+
+        PRIVATE_KEY: ${{ secrets.SSH_PEM_KEY }}
+        HOSTNAME: ${{secrets.SSH_HOST}}
+        USER_NAME: ${{secrets.USER_NAME}}
       run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PEM_KEY }}" > ~/.ssh/ec2-key.pem
-        chmod 600 ~/.ssh/ec2-key.pem
-        ssh-keyscan -H 15.207.116.153 >> ~/.ssh/known_hosts
-        ssh -i "ec2-key.pem" ubuntu@ec2-15-207-116-153.ap-south-1.compute.amazonaws.com
-        
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -o StrictHostKeyChecking=no -i ${private_key} ubuntu@ec2-${HOSTNAME}.ap-south-1.compute.amazonaws.com
+      
     - name: Run Python code
       run: |
         source myenv/bin/activate
