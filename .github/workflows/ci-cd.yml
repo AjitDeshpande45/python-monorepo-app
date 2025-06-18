@@ -38,11 +38,13 @@ jobs:
 
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
+        ssh -v -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
           echo "Logged into remote host"
           # Your remote commands here
         EOF
     - name: Run Python code
       run: |
+        ls
+        cd python-app/python-monorepo-app/
         source myenv/bin/activate
         PYTHONPATH=. python apps/user_app/app.py
