@@ -31,11 +31,11 @@ jobs:
         path: trivy-reports/report.txt
 
     - name: Loginng into VM
-      env: |
-
+      env: 
         PRIVATE_KEY: ${{ secrets.SSH_PEM_KEY }}
         HOSTNAME: ${{secrets.SSH_HOST}}
         USER_NAME: ${{secrets.USER_NAME}}
+
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -o StrictHostKeyChecking=no -i ${private_key} ubuntu@ec2-${HOSTNAME}.ap-south-1.compute.amazonaws.com
