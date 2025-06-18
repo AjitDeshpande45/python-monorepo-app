@@ -43,6 +43,6 @@ jobs:
           ls
           cd python-app/python-monorepo-app/
           source myenv/bin/activate
-          PYTHONPATH=. python apps/user_app/app.py
+          tmux new-session -d -s flaskserver 'source myenv/bin/activate && PYTHONPATH=. python apps/user_app/app.py'
         EOF
         
