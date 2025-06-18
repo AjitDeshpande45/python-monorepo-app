@@ -1,3 +1,5 @@
 Run application: PYTHONPATH=. python apps/user_app/app.py
 List services running on port 5000: lsof -i :5000 
 Kill process: kill -9 1138 
+Run pytest: PYTHONPATH=. pytest
+Run coverage: PYTHONPATH=. pytest --cov=apps.user_app --cov-report=xml:reports/coverage.xml
