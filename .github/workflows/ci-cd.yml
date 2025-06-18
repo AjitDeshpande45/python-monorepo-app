@@ -29,3 +29,16 @@ jobs:
       with:
         name: trivy-report
         path: trivy-reports/report.txt
+
+    - name: Loginng into VM
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PEM_KEY }}" > ~/.ssh/ec2-key.pem
+        chmod 600 ~/.ssh/ec2-key.pem
+        ssh-keyscan -H 15.207.116.153 >> ~/.ssh/known_hosts
+        ssh -i "ec2-key.pem" ubuntu@ec2-15-207-116-153.ap-south-1.compute.amazonaws.com
+        
+    - name: Run Python code
+      run: |
+        source myenv/bin/activate
+        PYTHONPATH=. python apps/user_app/app.py
