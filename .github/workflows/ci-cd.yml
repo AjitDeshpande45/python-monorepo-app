@@ -30,7 +30,7 @@ jobs:
         name: trivy-report
         path: trivy-reports/report.txt
 
-    - name: Loginng into VM
+    - name: Loginng into VM & run python server
       env: 
         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         HOSTNAME: ${{secrets.SSH_HOST}}
@@ -42,9 +42,8 @@ jobs:
           echo "Logged into remote host"
           # Your remote commands here
         EOF
-    - name: Run Python code
-      run: |
         ls
         cd python-app/python-monorepo-app/
         source myenv/bin/activate
         PYTHONPATH=. python apps/user_app/app.py
+        
