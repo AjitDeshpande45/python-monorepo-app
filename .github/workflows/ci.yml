@@ -48,7 +48,7 @@ jobs:
 
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -v -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
+        ssh -v -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << EOF
           echo "Logged into Sonar remote host"
           ls
           echo "Sonar Host $SONAR_HOST"
