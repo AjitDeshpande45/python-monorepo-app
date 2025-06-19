@@ -3,3 +3,24 @@ List services running on port 5000: lsof -i :5000
 Kill process: kill -9 1138 
 Run pytest: PYTHONPATH=. pytest
 Run coverage: PYTHONPATH=. pytest --cov=apps.user_app --cov-report=xml:reports/coverage.xml
+sudo apt update
+sudo apt install -y openjdk-17-jdk unzip curl
+curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+
+sudo unzip sonar-scanner.zip -d /opt
+sudo mv /opt/sonar-scanner-cli-5.0.1.3006-linux /opt/sonar-scanner
+
+echo 'export PATH="/opt/sonar-scanner/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+
+sonar-scanner --version
+
+sonar-scanner \
+          -Dsonar.projectKey=pythin-monorepo \
+          -Dsonar.sources=. \
+          -Dsonar.python.coverage.reportPaths=reports/coverage.xml \
+          -Dsonar.host.url=http://13.233.201.90:9000 \
+          -Dsonar.token=sqp_a7c3b19b865cbf5056c1d7bac00136233f0de13f
+
+
+sqp_a7c3b19b865cbf5056c1d7bac00136233f0de13f
