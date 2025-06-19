@@ -55,6 +55,6 @@ jobs:
           -Dsonar.projectKey=pythin-monorepo \
           -Dsonar.sources=. \
           -Dsonar.python.coverage.reportPaths=reports/coverage.xml \
-          -Dsonar.host.url=${SONAR_HOST} \
-          -Dsonar.token=${SONAR_TOKEN}
+          -Dsonar.host.url=http://13.233.201.90:9000 \
+          -Dsonar.token=sqp_a7c3b19b865cbf5056c1d7bac00136233f0de13f
         EOF
