@@ -48,7 +48,9 @@ jobs:
           rm -rf python-monorepo-app/
           git clone https://github.com/AjitDeshpande45/python-monorepo-app.git
           cd python-monorepo-app
+          python3 -m venv myenv
           source myenv/bin/activate
+          sudo apt install python3-pip
           pip install -r requirement.txt
           PYTHONPATH=. pytest --cov=apps.user_app --cov-report=xml:reports/coverage.xml
           sonar-scanner \
