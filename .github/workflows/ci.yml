@@ -29,20 +29,32 @@ jobs:
       with:
         name: trivy-report
         path: trivy-reports/report.txt
+        
+    - name: Run Test cases & Generate report
 
-    - name: Loginng into VM & run python server
+      run: |
+        python3 -m venv myenv
+        source myenv/bin/activate
+        pip install -r requirement.txt
+        PYTHONPATH=. pytest --cov=apps.user_app --cov-report=xml:reports/coverage.xml
+
+    - name: Sonar-Analysis
       env: 
         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         HOSTNAME: ${{secrets.SSH_HOST}}
         USER_NAME: ${{secrets.USER_NAME}}
+        SONAR_HOST: ${{secrets.SONAR_HOST}}
+        SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
 
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
         ssh -v -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << 'EOF'
-          echo "Logged into remote host"
+          echo "Logged into Sonar remote host"
           ls
-          cd python-app/python-monorepo-app/
-          source myenv/bin/activate
-          tmux new-session -d -s flaskserver 'source myenv/bin/activate && PYTHONPATH=. python apps/user_app/app.py'
+          sonar-scanner \
+          -Dsonar.projectKey=pythin-monorepo \
+          -Dsonar.sources=. \
+          -Dsonar.python.coverage.reportPaths=reports/coverage.xml \
+          -Dsonar.host.url=http://13.233.201.90:9000 \
+          -Dsonar.token=sqp_a7c3b19b865cbf5056c1d7bac00136233f0de13f
         EOF
-        
