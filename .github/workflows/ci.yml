@@ -30,14 +30,6 @@ jobs:
         name: trivy-report
         path: trivy-reports/report.txt
         
-    - name: Run Test cases & Generate report
-
-      run: |
-        python3 -m venv myenv
-        source myenv/bin/activate
-        pip install -r requirement.txt
-        PYTHONPATH=. pytest --cov=apps.user_app --cov-report=xml:reports/coverage.xml
-
     - name: Sonar-Analysis
       env: 
         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -53,6 +45,12 @@ jobs:
           ls
           echo "Sonar Host $SONAR_HOST"
           echo "Sonar Token $SONAR_TOKEN"
+          rm -rf python-monorepo-app/
+          git clone https://github.com/AjitDeshpande45/python-monorepo-app.git
+          cd python-monorepo-app
+          source myenv/bin/activate
+          pip install -r requirement.txt
+          PYTHONPATH=. pytest --cov=apps.user_app --cov-report=xml:reports/coverage.xml
           sonar-scanner \
           -Dsonar.projectKey=pythin-monorepo \
           -Dsonar.sources=. \
