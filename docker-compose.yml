@@ -1,0 +1,19 @@
+services:
+  user-database:
+    image: postgres:15.13
+    ports:
+      - 5432:5432
+  
+  user-app:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 8000:5000
+    depends_on:
+     - user-database
+
+
+
+
+
