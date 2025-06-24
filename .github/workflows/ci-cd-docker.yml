@@ -23,8 +23,8 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST }}
         SONAR_SCANNER_OPTS: >
-          -Dsonar.projectKey=python-app \
-          -Dsonar.projectName=python-app \
+          -Dsonar.projectKey=python-app
+          -Dsonar.projectName=python-app
           -Dsonar.python.coverage.reportPaths=reports/coverage.xml
 
     - name: SonarQube Quality Gate check
