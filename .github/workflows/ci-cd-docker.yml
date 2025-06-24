@@ -49,3 +49,17 @@ jobs:
         context: .
         file: Dockerfile
         tags: ajit45/python-user-app:${{ github.sha }}
+
+    - name: Deploy Python Server
+      env: 
+        PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        HOSTNAME: ${{ secrets.SSH_HOST }}
+        USER_NAME: ${{ secrets.USER_NAME }}
+
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        ssh -v -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << EOF
+          echo "Logged into EC2 remote host"
+          sudo docker stop  python-app-contaniner
+          sudo docker run -d -p 5000:5000 --name python-app-contaniner ajit45/python-user-app:${{ github.sha }}
+        EOF
