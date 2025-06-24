@@ -2,7 +2,7 @@ name: Python application
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "local-docket-dev" ]
 
 jobs:
   build:
@@ -39,24 +39,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-        
-    - name: Deploy Python Server
-      env: 
-        PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        HOSTNAME: ${{ secrets.SSH_HOST }}
-        USER_NAME: ${{ secrets.USER_NAME }}
 
-      run: |
-        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -v -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} << EOF
-          echo "Logged into EC2 remote host"
-          ls
-          rm -rf python-monorepo-app/
-          git clone https://github.com/AjitDeshpande45/python-monorepo-app.git
-          cd python-monorepo-app
-          python3 -m venv myenv
-          source myenv/bin/activate
-          sudo apt install python3-pip
-          pip install -r requirement.txt
-          tmux new-session -d -s flask_session 'PYTHONPATH=. python apps/user_app/app.py'
-        EOF
+    - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          context: .
+          file: Dockerfile
+          tags: ajit45/python-user-app:{{ github.sha }}
